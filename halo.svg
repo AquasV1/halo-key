@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 114 82" fill="none">
+  <defs>
+    <linearGradient id="glass" x1="22" y1="16" x2="84" y2="65" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" stop-opacity=".70"/><stop offset=".35" stop-color="#e8e8ed" stop-opacity=".20"/><stop offset=".7" stop-color="#a7aab5" stop-opacity=".08"/><stop offset="1" stop-color="#fff" stop-opacity=".48"/></linearGradient>
+    <linearGradient id="edge" x1="24" y1="24" x2="84" y2="61" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" stop-opacity=".95"/><stop offset=".42" stop-color="#fff" stop-opacity=".2"/><stop offset=".7" stop-color="#fff" stop-opacity=".24"/><stop offset="1" stop-color="#fff" stop-opacity=".8"/></linearGradient>
+  </defs>
+  <g transform="rotate(-17 57 41)">
+    <path fill-rule="evenodd" d="M106 43c0 14.4-21.9 26-49 26S8 57.4 8 43s21.9-26 49-26 49 11.6 49 26ZM91 43c0-8-15.2-14.5-34-14.5S23 35 23 43s15.2 14.5 34 14.5S91 51 91 43Z" fill="#fff" fill-opacity=".05"/>
+    <path fill-rule="evenodd" d="M106 39c0 14.4-21.9 26-49 26S8 53.4 8 39s21.9-26 49-26 49 11.6 49 26ZM91 39c0-8-15.2-14.5-34-14.5S23 31 23 39s15.2 14.5 34 14.5S91 47 91 39Z" fill="url(#glass)"/>
+    <ellipse cx="57" cy="39" rx="49" ry="26" stroke="url(#edge)" stroke-width="1.1"/>
+    <ellipse cx="57" cy="39" rx="34" ry="14.5" stroke="url(#edge)" stroke-width=".8"/>
+  </g>
+</svg>

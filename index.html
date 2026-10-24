@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101113">
+  <meta name="description" content="Your key to the Halo workspace. Copy your access key and get back to creating.">
+  <title>Halo — Your workspace key</title>
+  <link rel="icon" href="./halo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
+    <symbol id="icon-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  </svg>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="page">
+    <header class="navigation">
+      <a class="wordmark" href="./" aria-label="Halo home"><img src="./halo.svg" alt="" width="35" height="28"><span>halo</span></a>
+      <a class="help-link" href="#how-to">How it works <svg class="icon"><use href="#icon-arrow"/></svg></a>
+    </header>
+
+    <main id="main-content">
+      <section class="portal" aria-labelledby="page-title">
+        <div class="hero">
+          <div class="emblem" aria-hidden="true"><img src="./halo.svg" alt="" width="114" height="82"></div>
+          <p class="eyebrow">HALO WORKSPACE</p>
+          <h1 id="page-title">Your space. <span>Unlocked.</span></h1>
+          <p class="intro">A little less between you and your next idea.</p>
+        </div>
+
+        <div class="access-card">
+          <div class="card-heading"><h2>Your access key</h2><span class="access-type">Demo access</span></div>
+          <p class="card-description">Copy this key, then return to Halo to unlock your workspace.</p>
+          <div class="key-field"><code id="access-key" tabindex="0" aria-label="Halo access key">HALO-DEMO-2026</code><span class="key-mark" aria-hidden="true">↗</span></div>
+          <button class="copy-button" id="copy-key" type="button">
+            <svg class="icon" id="copy-icon" aria-hidden="true"><use href="#icon-copy"/></svg>
+            <span id="copy-label">Copy key</span>
+          </button>
+          <p class="copy-status" id="copy-status" role="status" aria-live="polite" aria-atomic="true">Ready when you are.</p>
+        </div>
+
+        <ol class="steps" id="how-to" aria-label="How to unlock Halo">
+          <li><span class="step-number">01</span><span>Copy your key</span></li>
+          <li><span class="step-number">02</span><span>Return to Halo</span></li>
+          <li><span class="step-number">03</span><span>Paste &amp; unlock</span></li>
+        </ol>
+        <noscript><p class="no-script">Select the key above and copy it with ⌘C or Ctrl+C.</p></noscript>
+      </section>
+    </main>
+
+    <footer><span>Made for your flow.</span><span>Halo · Local demo workspace</span></footer>
+  </div>
+</body>
+</html>
