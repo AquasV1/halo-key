@@ -150,3 +150,32 @@ footer div { display: flex; gap: 24px; }
   footer { align-items: flex-start; flex-direction: column; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+[hidden] { display: none !important; }
+.portal { max-width: 520px; }
+.challenge-options { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 11px; color: #a7a9b3; }
+.challenge-options select { max-width: 170px; font: inherit; color: #dedfe6; background: #28292e; border: 1px solid #ffffff22; border-radius: 7px; padding: 8px 10px; }
+.problem-box { border: 1px solid #ffffff13; border-radius: 12px; padding: 22px 19px; background: #00000020; margin: 17px 0 20px; }
+.problem-box .eyebrow { display: block; font-size: 9px; letter-spacing: 1.7px; }
+#math-problem { color: #e1e2e8; font-size: 16px; font-weight: 450; line-height: 1.85; margin: 12px 0 0; }
+.answer-label { display: block; font-size: 11px; color: #b2b4bd; margin-bottom: 9px; }
+#math-answer { width: 100%; min-height: 45px; border: 1px solid #ffffff25; border-radius: 8px; background: #00000024; padding: 11px 13px; font: 13px Menlo, Consolas, monospace; color: #e6e7ed; }
+#math-answer::placeholder { color: #777b87; font-family: -apple-system, sans-serif; font-size: 11px; }
+#math-answer[aria-invalid="true"] { border-color: #d4a098; }
+.answer-help { font-size: 10px; line-height: 1.7; color: #8c8f9b; margin: 9px 0 4px; }
+.challenge-bottom { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-top: 16px; }
+.challenge-bottom button { border: 0; padding: 5px 0; background: transparent; color: #c0c2cc; font-size: 10px; cursor: pointer; }
+.challenge-bottom button:hover { color: #fff; }
+.challenge-bottom span { color: #777b87; font-size: 9px; }
+.challenge-feedback { font-size: 11px; line-height: 1.7; min-height: 19px; margin: 12px 0 0; color: #c7b3ac; }
+#key-panel .key-field code { font-size: 12px; letter-spacing: .45px; white-space: normal; overflow-wrap: anywhere; line-height: 1.85; min-width: 0; }
+.expiry-panel { margin-top: 22px; border-top: 1px solid #ffffff12; padding-top: 20px; }
+.expiry-panel > div:first-child { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.expiry-panel span { font-size: 8px; letter-spacing: 1.5px; color: #868b99; }
+.expiry-panel strong { font: 20px Menlo, Consolas, monospace; color: #dadce7; font-variant-numeric: tabular-nums; font-weight: 400; }
+.expiry-panel p { font-size: 10px; color: #9296a4; line-height: 1.8; margin: 10px 0 12px; }
+.expiry-track { height: 3px; border-radius: 4px; overflow: hidden; background: #ffffff09; }
+.expiry-track i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg,#838999,#d2d6e1); border-radius: inherit; transition: width 1s linear; }
+button:disabled { opacity: .55; cursor: wait; transform: none; }
+@media (max-width: 540px) { #math-problem { font-size: 15px; } .problem-box { padding: 18px 15px; } }
+@media (prefers-reduced-motion: reduce) { .expiry-track i { transition: none; } }

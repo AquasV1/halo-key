@@ -1,15 +1,29 @@
 # Halo key website
 
-A responsive glass key page for Halo's local workspace demo. Copy `HALO-DEMO-2026`, return to Halo, paste it into the key field, and select **Unlock**.
+A responsive glass key page for Halo 2.3. Solve one randomized math problem, copy the generated key, return to Halo, and select **Unlock**. Keys last exactly 24 hours from creation.
 
-The site is plain HTML, CSS, and JavaScript. It includes a responsive layout, original glass halo artwork, a three-step setup guide, an editor preview, a copyable Luau example, version 2.2 release notes, and an expandable FAQ. Keyboard focus states, reduced-motion support, and clipboard confirmation with a manual-copy fallback are included. It makes no external script, font, analytics, or API requests.
+## Math challenge
+
+Choose pre-algebra, Algebra I, Algebra II, precalculus, calculus, or a random level. Questions include multi-step arithmetic, linear equations and systems, quadratics, exponentials, function composition, geometric series, derivatives, and definite integrals. Answers accept signed decimals and fractions within an absolute tolerance of 0.000001. Invalid or incorrect answers never reveal a key through the UI. There is no timer for solving.
+
+## Key lifecycle
+
+A correct answer generates a `HALO24-…` key with a creation timestamp, random nonce, and checksum. The page stores it under `halo.access.v1` in browser local storage, restores the same key after refresh, and displays a live expiry countdown. Once expired, it clears the key and presents a new challenge. Refreshing never renews access. Local storage failure leaves generation and copying usable, with a message explaining that the browser could not save it.
+
+Halo's C++ app shares this format in `access_key.cpp`, remembers valid access locally, and checks expiry both on launch and during use. File → Key access shows details; File → Forget saved key clears desktop persistence. The former static demo key is retired. No permanent owner key or fingerprint is included in this public website.
 
 ## GitHub Pages
 
-Publish from the `main` branch and the `/(root)` folder in **Settings → Pages**. The `.nojekyll` file allows GitHub Pages to serve these static files directly. No installation or build command is required.
+Publish `main` from the root folder. `.nojekyll` allows these static files to be served directly. No dependencies or build step are required.
 
-Edit `index.html`, `style.css`, `app.js`, and `halo.svg`, then push to `main` to update the page.
+- `index.html` / `style.css`: page, form, countdown, editor guide, examples, release notes, and FAQ.
+- `challenges.js`: question generation and numeric/fraction validation.
+- `access.js`: 24-hour token creation and inspection.
+- `app.js`: form, storage, countdown, copying, and expiry behavior.
+- `halo.svg`: original glass halo artwork.
 
-The displayed key is the existing local demo key. This page does not provide server-side licensing or generate unique keys.
+The site uses local system fonts, keyboard focus states, reduced-motion support, and clipboard copying with a selection fallback. It makes no external script, font, analytics, or API requests.
 
-Halo 2.2 remembers a successful unlock locally. **File → Forget saved key** clears remembered access. Code suggestions use faint inline text at the end of the current line; Tab accepts, Escape dismisses, and Enter inserts a new line. The website explains these controls and the scope of the local runtime.
+## Local demo scope
+
+Answer verification and key generation happen in the browser. The checksum is public and is not a cryptographic signature or proof that a person solved a problem. Local clock and storage checks provide demo behavior; server-side issuance and validation are needed for trusted licensing, revocation, or abuse prevention. No private signing secret is embedded in the page.
