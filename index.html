@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101113">
-  <meta name="description" content="Your key to the Halo workspace. Copy your access key and get back to creating.">
+  <meta name="description" content="Get your Halo workspace key, learn the editor, and see what’s new.">
   <title>Halo — Your workspace key</title>
   <link rel="icon" href="./halo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./style.css">
@@ -20,11 +20,11 @@
   <div class="page">
     <header class="navigation">
       <a class="wordmark" href="./" aria-label="Halo home"><img src="./halo.svg" alt="" width="35" height="28"><span>halo</span></a>
-      <a class="help-link" href="#how-to">How it works <svg class="icon"><use href="#icon-arrow"/></svg></a>
+      <nav aria-label="Main navigation"><a href="#get-key">Get key</a><a href="#guide">Guide</a><a href="#updates">Updates</a><a href="#faq">FAQ</a></nav>
     </header>
 
     <main id="main-content">
-      <section class="portal" aria-labelledby="page-title">
+      <section id="get-key" class="portal" aria-labelledby="page-title">
         <div class="hero">
           <div class="emblem" aria-hidden="true"><img src="./halo.svg" alt="" width="114" height="82"></div>
           <p class="eyebrow">HALO WORKSPACE</p>
@@ -40,7 +40,7 @@
             <svg class="icon" id="copy-icon" aria-hidden="true"><use href="#icon-copy"/></svg>
             <span id="copy-label">Copy key</span>
           </button>
-          <p class="copy-status" id="copy-status" role="status" aria-live="polite" aria-atomic="true">Ready when you are.</p>
+          <p class="copy-status" id="copy-status" role="status" aria-live="polite" aria-atomic="true">Paste once. Halo remembers this device.</p>
         </div>
 
         <ol class="steps" id="how-to" aria-label="How to unlock Halo">
@@ -50,9 +50,51 @@
         </ol>
         <noscript><p class="no-script">Select the key above and copy it with ⌘C or Ctrl+C.</p></noscript>
       </section>
+      <section class="content-section" id="guide" aria-labelledby="guide-title">
+        <div class="section-heading"><p class="eyebrow">GET SETTLED IN</p><h2 id="guide-title">From key to first line.</h2><p>A few small steps, then the space is yours.</p></div>
+        <div class="guide-grid">
+          <article class="glass-panel"><span class="number">01 / ACCESS</span><h3>Copy. Paste. You’re in.</h3><p>Open Halo, paste the key into the key field, and select Unlock. The key is remembered after a successful unlock.</p><a class="text-link" href="#get-key">Back to your key ↗</a></article>
+          <article class="glass-panel"><span class="number">02 / WRITE</span><h3>Keep your train of thought.</h3><p>Start a new file or open a .luau script. Syntax colors and aligned line numbers help you follow your code.</p><p class="small-note">New, Open, Save, and Clear live along the bottom.</p></article>
+          <article class="glass-panel"><span class="number">03 / RUN</span><h3>See your idea work.</h3><p>Select Execute to run Luau locally and view results in Output. The button becomes Stop while the script runs.</p><p class="small-note">⌘ Return runs or stops your script on Mac.</p></article>
+        </div>
+      </section>
+
+      <section class="content-section workspace-section" aria-labelledby="workspace-title">
+        <div class="section-heading"><p class="eyebrow">ROOM TO THINK</p><h2 id="workspace-title">Your code stays in focus.</h2><p>Soft glass. Clear colors. Suggestions that stay out of the way.</p></div>
+        <div class="workspace-grid">
+          <div class="editor-preview glass-panel" role="img" aria-label="Editor preview: a faint print suggestion appears after pr, with a Tab hint, without covering existing code.">
+            <div class="preview-title"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>hello.luau</span><span class="preview-tag">LUAU</span></div>
+            <div class="preview-code" aria-hidden="true"><div><b>1</b><span class="syntax-comment">-- A little room for your next idea</span></div><div><b>2</b><span class="syntax-keyword">local</span> message = <span class="syntax-string">"Hello, Halo"</span></div><div><b>3</b>pr<span class="ghost">int</span><kbd>Tab</kbd></div><div><b>4</b></div><div><b>5</b></div></div>
+            <div class="preview-toolbar"><span>New</span><span>Open</span><span>Save</span><span>Clear</span><span class="preview-execute">▷ Execute</span></div>
+          </div>
+          <div class="feature-list"><article><h3>A suggestion, when you need it.</h3><p>A faint word ending appears in empty space after your cursor. Tab accepts it. Escape dismisses it. Enter keeps making a new line.</p></article><article><h3>Unlock once. Come back freely.</h3><p>Halo remembers a valid key on your device. Clear it any time with File → Forget saved key.</p></article><article><h3>Everything close at hand.</h3><p>Open and save your scripts, see local output, and stop a running script without leaving the editor.</p></article></div>
+        </div>
+      </section>
+
+      <section class="content-section example-section glass-panel" aria-labelledby="example-title">
+        <div><p class="eyebrow">YOUR FIRST SCRIPT</p><h2 id="example-title">Start with a hello.</h2><p>Paste this into Halo and select Execute.<br>Your message will appear in Output.</p><button class="secondary-button" type="button" id="copy-example">Copy example <svg class="icon" aria-hidden="true"><use href="#icon-copy"/></svg></button><p class="example-status" id="example-status" role="status" aria-live="polite"></p></div>
+        <pre tabindex="0"><code id="example-code">local message = "Hello, Halo"
+print(message)</code></pre>
+      </section>
+
+      <section class="content-section" id="updates" aria-labelledby="updates-title">
+        <div class="section-heading"><p class="eyebrow">A LITTLE MORE REFINED</p><h2 id="updates-title">What’s new in Halo.</h2></div>
+        <article class="release glass-panel"><div class="release-label"><span class="access-type">Version 2.2</span><span>Editor refresh</span></div><div><h3>Less interruption. More flow.</h3><ul><li>Quiet inline suggestions replace the floating autocomplete list.</li><li>Valid keys are remembered across launches on the same device.</li><li>A new guide, example script, and answers here when you need them.</li></ul></div></article>
+      </section>
+
+      <section class="content-section faq-section" id="faq" aria-labelledby="faq-title">
+        <div class="section-heading"><p class="eyebrow">GOOD TO KNOW</p><h2 id="faq-title">A few quick answers.</h2></div>
+        <div class="faq-list">
+          <details><summary>Will I need to enter the key every time?</summary><p>After one successful unlock in Halo 2.2, your access is remembered on that device. The short intro still plays. To reset it, choose File → Forget saved key. Removing app preferences or changing the demo key will require another unlock.</p></details>
+          <details><summary>How do code suggestions work?</summary><p>Pause after typing part of a word, or a known library such as math. A faint ending appears only when there is enough empty space at the end of the line. Press Tab to accept or Escape to dismiss. Enter makes a new line. Use Option + Escape on Mac or Ctrl + Space on Windows/Linux to request or cycle suggestions.</p></details>
+          <details><summary>What scripts can Halo run?</summary><p>Halo runs standard Luau locally in its own runtime. Try print, tables, functions, and math. Roblox game APIs such as game, workspace, and Instance are not available in this local workspace.</p></details>
+          <details><summary>Is this a unique or paid access key?</summary><p>This is a shared local demo key. There is no account, purchase, or server verification. The website does not collect your key or connect to your desktop app.</p></details>
+          <details><summary>The copy button isn’t working. What can I do?</summary><p>Select HALO-DEMO-2026 above, then press ⌘C on Mac or Ctrl+C on Windows/Linux. Return to Halo, paste it into the key field, and select Unlock.</p></details>
+        </div>
+      </section>
     </main>
 
-    <footer><span>Made for your flow.</span><span>Halo · Local demo workspace</span></footer>
+    <footer><span>Halo · Made for your flow.</span><div><a href="https://github.com/AquasV1/halo-key">Website source ↗</a><a href="#get-key">Back to top ↑</a></div></footer>
   </div>
 </body>
 </html>

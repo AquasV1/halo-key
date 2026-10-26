@@ -1,5 +1,27 @@
 "use strict";
 
+async function copyText(element) {
+  let copied = false;
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(element.textContent.trim());
+      copied = true;
+    }
+  } catch { /* Selection fallback also works when clipboard access is denied. */ }
+
+  if (!copied) {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    try { copied = document.execCommand("copy"); } catch { /* Keep the key selected. */ }
+  }
+
+  return copied;
+}
+
+
 const button = document.getElementById("copy-key");
 const label = document.getElementById("copy-label");
 const icon = document.querySelector("#copy-icon use");
@@ -9,22 +31,7 @@ let resetTimer;
 
 button.addEventListener("click", async () => {
   clearTimeout(resetTimer);
-  let copied = false;
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(key.textContent.trim());
-      copied = true;
-    }
-  } catch { /* Selection fallback also works when clipboard access is denied. */ }
-
-  if (!copied) {
-    const range = document.createRange();
-    range.selectNodeContents(key);
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-    try { copied = document.execCommand("copy"); } catch { /* Keep the key selected. */ }
-  }
+  const copied = await copyText(key);
 
   if (copied) {
     label.textContent = "Key copied";
@@ -42,4 +49,12 @@ button.addEventListener("click", async () => {
     status.textContent = "Press ⌘C or Ctrl+C to copy the selected key.";
     status.dataset.state = "manual";
   }
+});
+
+const exampleButton = document.getElementById("copy-example");
+const example = document.getElementById("example-code");
+const exampleStatus = document.getElementById("example-status");
+exampleButton.addEventListener("click", async () => {
+  const copied = await copyText(example);
+  exampleStatus.textContent = copied ? "Copied. Paste into Halo, then select Execute." : "Example selected. Press ⌘C or Ctrl+C to copy.";
 });
