@@ -175,7 +175,22 @@ footer div { display: flex; gap: 24px; }
 .expiry-panel strong { font: 20px Menlo, Consolas, monospace; color: #dadce7; font-variant-numeric: tabular-nums; font-weight: 400; }
 .expiry-panel p { font-size: 10px; color: #9296a4; line-height: 1.8; margin: 10px 0 12px; }
 .expiry-track { height: 3px; border-radius: 4px; overflow: hidden; background: #ffffff09; }
-.expiry-track i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg,#838999,#d2d6e1); border-radius: inherit; transition: width 1s linear; }
+.expiry-track progress { display: block; height: 100%; width: 100%; background: linear-gradient(90deg,#838999,#d2d6e1); border-radius: inherit; appearance:none; border:none; }
 button:disabled { opacity: .55; cursor: wait; transform: none; }
 @media (max-width: 540px) { #math-problem { font-size: 15px; } .problem-box { padding: 18px 15px; } }
-@media (prefers-reduced-motion: reduce) { .expiry-track i { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .expiry-track progress { transition: none; } }
+
+.challenge-options + .challenge-options { margin-top:10px; }
+.puzzle-instructions { color:#aeb4bf; font-size:12px; line-height:1.6; margin:12px 0; }
+.puzzle-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:9px; max-width:280px; margin:18px auto; }
+.puzzle-grid button { aspect-ratio:1; border:1px solid #ffffff18; border-radius:12px; background:linear-gradient(145deg,#1b1e24,#121419); cursor:pointer; box-shadow:inset 0 1px 0 #ffffff08; transition:background .15s,border-color .15s,box-shadow .15s; }
+.puzzle-grid button.lit { background:linear-gradient(145deg,#d6e2eb,#8b9cad); border-color:#e1ebf2b3; box-shadow:inset 0 1px 0 #ffffffa0,0 0 18px #adbfda18; }
+.puzzle-grid button:focus-visible { outline:2px solid #d5e7fa; outline-offset:3px; }
+.puzzle-grid button:hover { border-color:#d7e5f499; }
+.puzzle-footer { display:flex; justify-content:space-between; gap:12px; align-items:center; color:#9ea7b6; font-size:11px; margin-bottom:16px; }
+.puzzle-footer button { border:none; color:#ced7e4; background:transparent; cursor:pointer; text-decoration:underline; text-underline-offset:3px; }
+.expiry-track progress { width:100%;height:3px;display:block; }
+.expiry-track progress::-webkit-progress-bar { background:#ffffff09; }
+.expiry-track progress::-webkit-progress-value { background:linear-gradient(90deg,#838999,#d2d6e1); }
+.expiry-track progress::-moz-progress-bar { background:linear-gradient(90deg,#838999,#d2d6e1); }
+@media(prefers-reduced-motion:reduce) { .puzzle-grid button { transition:none; } }

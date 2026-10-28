@@ -31,6 +31,9 @@ const copyButton = document.getElementById("copy-key");
 const copyLabel = document.getElementById("copy-label");
 const copyIcon = document.querySelector("#copy-icon use");
 const copyStatus = document.getElementById("copy-status");
+const kind=document.getElementById("challenge-kind");
+const grid=document.getElementById("puzzle-grid");
+let puzzleBoard=[],puzzleMoves=0;
 let problem, token = null, grant = null, issuing = false, resetTimer;
 
 function store(value) {
@@ -42,7 +45,16 @@ function store(value) {
 }
 function nextProblem() {
   if (issuing) return;
-  problem = HaloChallenge.make(level.value);
+  const isPuzzle=kind.value==="puzzle";
+  problem = isPuzzle ? HaloPuzzle.make() : HaloChallenge.make(level.value);
+  document.getElementById("math-level-options").hidden=isPuzzle;
+  document.getElementById("math-fields").hidden=isPuzzle;
+  document.getElementById("puzzle-panel").hidden=!isPuzzle;
+  if(isPuzzle) {
+    puzzleBoard=problem.initial.slice();puzzleMoves=0;grid.replaceChildren();
+    puzzleBoard.forEach((_,index)=>{const tile=document.createElement("button");tile.type="button";tile.dataset.index=String(index);grid.append(tile);});
+    updatePuzzle();
+  }
   document.getElementById("problem-topic").textContent = problem.label;
   document.getElementById("math-problem").textContent = problem.prompt;
   answer.value = "";
@@ -55,7 +67,7 @@ function showChallenge(message = "") {
   keyPanel.hidden = true;
   challengePanel.hidden = false;
   heading.textContent = "Earn your access key";
-  description.textContent = "Solve one randomized math problem. Your key lasts 24 hours from the moment you earn it.";
+  description.textContent = "Choose a light puzzle or a math problem. Your key lasts 24 hours from the moment you earn it.";
   nextProblem();
   feedback.textContent = message;
 }
@@ -65,12 +77,12 @@ function tick() {
   if (!remaining) {
     store(null);
     clearTimeout(resetTimer);
-    showChallenge("Your key expired. Solve a new problem to get another 24 hours.");
+    showChallenge("Your key expired. Solve a new challenge to get another 24 hours.");
     return;
   }
   const hours = Math.floor(remaining/3600), minutes = Math.floor(remaining%3600/60), seconds = remaining%60;
   document.getElementById("key-countdown").textContent = [hours,minutes,seconds].map(n=>String(n).padStart(2,"0")).join(":");
-  document.getElementById("expiry-progress").style.width = `${Math.min(100, remaining/HaloAccess.lifetime*100)}%`;
+  document.getElementById("expiry-progress").value = remaining;
 }
 function showKey(value, info, remembered) {
   token=value; grant=info;
@@ -85,20 +97,46 @@ function showKey(value, info, remembered) {
   document.getElementById("key-expiry").textContent=`Expires ${date.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZoneName:"short"})}.`;
   tick();
 }
+function updatePuzzle() {
+  [...grid.children].forEach((tile,index)=>{
+    tile.classList.toggle("lit",Boolean(puzzleBoard[index]));
+    tile.setAttribute("aria-pressed",puzzleBoard[index]?"true":"false");
+    tile.setAttribute("aria-label",`Row ${Math.floor(index/4)+1}, column ${index%4+1}: ${puzzleBoard[index]?"on":"off"}`);
+    tile.disabled=issuing;
+  });
+  const left=puzzleBoard.filter(Boolean).length;
+  document.getElementById("puzzle-status").textContent=left ? `${left} lights on · ${puzzleMoves} moves` : "Solved. Claim your key below.";
+}
+grid.addEventListener("click",event=>{
+  const tile=event.target.closest("button[data-index]");if(!tile || issuing || grant)return;
+  puzzleBoard=HaloPuzzle.toggle(puzzleBoard,Number(tile.dataset.index));puzzleMoves++;updatePuzzle();feedback.textContent="";
+});
+grid.addEventListener("keydown",event=>{
+  const tile=event.target.closest("button[data-index]");if(!tile)return;
+  const index=Number(tile.dataset.index),row=Math.floor(index/4),col=index%4;
+  const offsets={ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]};
+  if(!offsets[event.key])return;event.preventDefault();const [dy,dx]=offsets[event.key];
+  const y=Math.max(0,Math.min(3,row+dy)),x=Math.max(0,Math.min(3,col+dx));grid.children[y*4+x].focus();
+});
+document.getElementById("reset-puzzle").addEventListener("click",()=>{if(issuing || grant)return;puzzleBoard=problem.initial.slice();puzzleMoves=0;updatePuzzle();feedback.textContent="";});
+kind.addEventListener("change",nextProblem);
 level.addEventListener("change", nextProblem);
-document.getElementById("new-problem").addEventListener("click", () => { nextProblem(); answer.focus(); });
+document.getElementById("new-problem").addEventListener("click", () => { nextProblem(); if(kind.value==="math")answer.focus();else grid.firstElementChild?.focus(); });
 answer.addEventListener("input",()=>{ answer.removeAttribute("aria-invalid"); feedback.textContent=""; });
 document.getElementById("challenge-form").addEventListener("submit", async event => {
   event.preventDefault();
   if (issuing || !problem || grant) return;
-  if (!HaloChallenge.correct(problem, answer.value)) {
+  if(kind.value==="puzzle" && !HaloPuzzle.solved(puzzleBoard)) {
+    feedback.textContent="There are still lights on. Turn them all off, then claim your key.";return;
+  }
+  if (kind.value==="math" && !HaloChallenge.correct(problem, answer.value)) {
     answer.setAttribute("aria-invalid","true");
     feedback.textContent=HaloChallenge.parseAnswer(answer.value) === null
       ? "Enter a number or a fraction, such as 7/3."
       : "That answer doesn’t match. Try the problem again.";
     answer.focus(); return;
   }
-  issuing=true; submit.disabled=true; level.disabled=true;
+  issuing=true; submit.disabled=true; level.disabled=true; kind.disabled=true; if(kind.value==="puzzle")updatePuzzle();
   feedback.textContent="Correct. Preparing your key…";
   try {
     const value=await HaloAccess.issue();
@@ -107,7 +145,7 @@ document.getElementById("challenge-form").addEventListener("submit", async event
     showKey(value, info, store(value));
   } catch {
     feedback.textContent="Couldn’t create a key. Check that this page uses HTTPS and try again.";
-  } finally { issuing=false; submit.disabled=false; level.disabled=false; }
+  } finally { issuing=false; submit.disabled=false; level.disabled=false; kind.disabled=false; if(kind.value==="puzzle")updatePuzzle(); }
 });
 copyButton.addEventListener("click", async () => {
   if (!grant || grant.expiresAt <= Math.floor(Date.now()/1000)) { tick(); return; }
@@ -127,9 +165,9 @@ async function restore() {
     if (info && !info.expired) showKey(saved,info,true);
     else {
       if (saved) store(null);
-      showChallenge(info?.expired ? "Your previous key expired. Solve a new problem for 24 more hours." : "");
+      showChallenge(info?.expired ? "Your previous key expired. Solve a new challenge for 24 more hours." : "");
     }
-  } catch { showChallenge("Couldn’t read saved access. You can still solve a new problem."); }
+  } catch { showChallenge("Couldn’t read saved access. You can still solve a new challenge."); }
   loading.hidden=true;
   card.setAttribute("aria-busy","false");
 }
