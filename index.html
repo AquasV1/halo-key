@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; font-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://halo-key-service.gsrisun19.chatgpt.site; font-src 'self'; base-uri 'none'; object-src 'none'; form-action 'none'; upgrade-insecure-requests">
   <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101113">
   <meta name="description" content="Solve a light puzzle or math challenge for 24 hours of Halo workspace access. Your key is saved until it expires.">
   <title>Halo — Your workspace key</title>
   <link rel="icon" href="./halo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./style.css?v=2.6">
-  <script src="./access.js?v=2.6" defer></script>
-  <script src="./challenges.js?v=2.6" defer></script>
-  <script src="./puzzles.js?v=2.6" defer></script>
-  <script src="./app.js?v=2.6" defer></script>
+  <link rel="stylesheet" href="./style.css?v=2.7">
+  <script src="./access.js?v=2.7" defer></script>
+  <script src="./challenges.js?v=2.7" defer></script>
+  <script src="./puzzles.js?v=2.7" defer></script>
+  <script src="./app.js?v=2.7" defer></script>
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -39,7 +39,7 @@
 
         <div class="access-card" aria-busy="true" id="access-card">
           <div class="card-heading"><h2 id="access-heading">Earn your access key</h2><span class="access-type">24-hour access</span></div>
-          <p class="card-description" id="access-description">Choose a light puzzle or a math problem. Your key lasts 24 hours from the moment you earn it.</p>
+          <p class="card-description" id="access-description">Choose a server-checked puzzle or math problem. Your signed key lasts 24 hours from the moment you earn it.</p>
           <div id="challenge-panel" hidden>
             <div class="challenge-options"><label for="challenge-kind">Your challenge</label><select id="challenge-kind"><option value="puzzle">Light puzzle</option><option value="math">Math problem</option></select></div>
             <div class="challenge-options" id="math-level-options" hidden><label for="challenge-level">Problem level</label><select id="challenge-level"><option value="mixed">Surprise me</option><option value="prealgebra">Pre-algebra</option><option value="algebra">Algebra I</option><option value="algebra2">Algebra II</option><option value="precalculus">Precalculus</option><option value="calculus">Calculus</option></select></div>
@@ -56,7 +56,7 @@
               </div>
               <button class="copy-button" id="check-answer" type="submit">Check challenge &amp; get key <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
             </form>
-            <div class="challenge-bottom"><button type="button" id="new-problem">New challenge ↻</button><span>No timer. Take your time.</span></div>
+            <div class="challenge-bottom"><button type="button" id="new-problem">New challenge ↻</button><span>Challenges expire after 15 minutes.</span></div>
             <p class="challenge-feedback" id="challenge-feedback" role="status" aria-live="polite"></p>
           </div>
           <div id="key-panel" hidden>
@@ -68,7 +68,7 @@
           <p class="copy-status" id="access-loading" role="status">Checking saved access…</p>
         </div>
         <ol class="steps" id="how-to" aria-label="How to unlock Halo"><li><span class="step-number">01</span><span>Solve a challenge</span></li><li><span class="step-number">02</span><span>Copy your key</span></li><li><span class="step-number">03</span><span>Paste &amp; unlock</span></li></ol>
-        <noscript><p class="no-script">JavaScript is needed to check your answer and generate a key.</p></noscript>
+        <noscript><p class="no-script">JavaScript is needed to connect to the key service.</p></noscript>
       </section>
       <section class="content-section" id="guide" aria-labelledby="guide-title">
         <div class="section-heading"><p class="eyebrow">GET SETTLED IN</p><h2 id="guide-title">From key to first line.</h2><p>A few small steps, then the space is yours.</p></div>
@@ -99,7 +99,7 @@ print(message)</code></pre>
 
       <section class="content-section" id="updates" aria-labelledby="updates-title">
         <div class="section-heading"><p class="eyebrow">A LITTLE MORE REFINED</p><h2 id="updates-title">What’s new in Halo.</h2></div>
-        <article class="release glass-panel"><div class="release-label"><span class="access-type">Version 2.6</span><span>Puzzles + math</span></div><div><h3>A challenge. Then 24 hours.</h3><ul><li>Solvable light puzzles plus randomized math from pre-algebra through calculus.</li><li>Keys last 24 hours from solving, with a live countdown.</li><li>Saved access survives a relaunch without extending the deadline.</li></ul></div></article>
+        <article class="release glass-panel"><div class="release-label"><span class="access-type">Version 2.7</span><span>Signed access</span></div><div><h3>A challenge. Then 24 hours.</h3><ul><li>Solvable light puzzles plus randomized math from pre-algebra through calculus.</li><li>Answers are checked on the server; keys are signed and valid for 24 hours.</li><li>Saved access survives a relaunch without extending the deadline.</li></ul></div></article>
       </section>
 
       <section class="content-section faq-section" id="faq" aria-labelledby="faq-title">
@@ -108,8 +108,8 @@ print(message)</code></pre>
           <details><summary>Will I need to enter the key every time?</summary><p>Halo remembers a valid key until its original 24-hour expiry. Closing the app, refreshing this page, or entering the key again does not reset that deadline. After expiry, solve a new challenge. File → Forget saved key clears the saved key on your device.</p></details>
           <details><summary>How do code suggestions work?</summary><p>Pause after typing part of a word, or a known library such as math. A faint ending appears only when there is enough empty space at the end of the line. Press Tab to accept or Escape to dismiss. Enter makes a new line. Use Option + Escape on Mac or Ctrl + Space on Windows/Linux to request or cycle suggestions.</p></details>
           <details><summary>What scripts can Halo run?</summary><p>Halo runs standard Luau locally in its own runtime. Try print, tables, functions, and math. Roblox game APIs such as game, workspace, and Instance are not available in this local workspace.</p></details>
-          <details><summary>How does the 24-hour expiry work?</summary><p>The countdown begins when your correct answer generates a key, not when you first paste it into Halo. The website and desktop app check the same deadline. This is a browser-based demo access system with local clock checks, rather than a server-backed licensing service.</p></details>
-          <details><summary>How do the light puzzles work?</summary><p>Flip a tile to toggle it and its horizontal and vertical neighbors. Your goal is an entirely dark board. Every generated board is solvable, and there is no timer. Use Reset board to start the same puzzle again, or New challenge for a different board. Keyboard users can move with arrow keys and press Space to flip a tile.</p></details>
+          <details><summary>How does the 24-hour expiry work?</summary><p>The countdown begins when your correct answer generates a key, not when you first paste it into Halo. The website and desktop app check the same deadline. The service validates your answer and signs the original issue and expiry times. Halo verifies that signature using a public key. Browser code cannot issue new signed keys.</p></details>
+          <details><summary>How do the light puzzles work?</summary><p>Flip a tile to toggle it and its horizontal and vertical neighbors. Your goal is an entirely dark board. Every generated board is solvable, and each challenge stays open for 15 minutes. Use Reset board to start the same puzzle again, or New challenge for a different board. Keyboard users can move with arrow keys and press Space to flip a tile.</p></details>
           <details><summary>What kinds of math problems will I get?</summary><p>Choose a level or let Halo surprise you: multi-step arithmetic, linear equations and systems, quadratics and exponentials, function composition and series, or derivatives and definite integrals. Answers can be exact fractions or decimals. An incorrect answer never reveals a key.</p></details>
           <details><summary>The copy button isn’t working. What can I do?</summary><p>After solving, select the full generated key above, then press ⌘C on Mac or Ctrl+C on Windows/Linux. Return to Halo, paste it into the key field, and select Unlock.</p></details>
         </div>

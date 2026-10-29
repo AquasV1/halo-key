@@ -15,7 +15,7 @@ async function copyText(element) {
   try { return document.execCommand("copy"); } catch { return false; }
 }
 
-const storageName = "halo.access.v1";
+const storageName = "halo.access.v2";
 const card = document.getElementById("access-card");
 const challengePanel = document.getElementById("challenge-panel");
 const keyPanel = document.getElementById("key-panel");
@@ -33,7 +33,7 @@ const copyIcon = document.querySelector("#copy-icon use");
 const copyStatus = document.getElementById("copy-status");
 const kind=document.getElementById("challenge-kind");
 const grid=document.getElementById("puzzle-grid");
-let puzzleBoard=[],puzzleMoves=0;
+let puzzleBoard=[],puzzleMoves=0,puzzleHistory=[];
 let problem, token = null, grant = null, issuing = false, resetTimer;
 
 function store(value) {
@@ -43,23 +43,26 @@ function store(value) {
     return true;
   } catch { return false; }
 }
-function nextProblem() {
-  if (issuing) return;
-  const isPuzzle=kind.value==="puzzle";
-  problem = isPuzzle ? HaloPuzzle.make() : HaloChallenge.make(level.value);
-  document.getElementById("math-level-options").hidden=isPuzzle;
-  document.getElementById("math-fields").hidden=isPuzzle;
-  document.getElementById("puzzle-panel").hidden=!isPuzzle;
-  if(isPuzzle) {
-    puzzleBoard=problem.initial.slice();puzzleMoves=0;grid.replaceChildren();
-    puzzleBoard.forEach((_,index)=>{const tile=document.createElement("button");tile.type="button";tile.dataset.index=String(index);grid.append(tile);});
-    updatePuzzle();
-  }
-  document.getElementById("problem-topic").textContent = problem.label;
-  document.getElementById("math-problem").textContent = problem.prompt;
-  answer.value = "";
-  answer.removeAttribute("aria-invalid");
-  feedback.textContent = "";
+let challengeRequest=null;
+async function nextProblem(message="") {
+  if(issuing)return;
+  challengeRequest?.abort();const controller=new AbortController();challengeRequest=controller;
+  problem=null;submit.disabled=true;feedback.textContent="Loading a server challenge…";
+  try {
+    const isPuzzle=kind.value==="puzzle";
+    const fresh=await HaloAccess.challenge(kind.value,level.value,controller.signal);
+    if(controller.signal.aborted)return;problem=fresh;
+    document.getElementById("math-level-options").hidden=isPuzzle;
+    document.getElementById("math-fields").hidden=isPuzzle;
+    document.getElementById("puzzle-panel").hidden=!isPuzzle;
+    if(isPuzzle) {
+      puzzleBoard=problem.initial.slice();puzzleMoves=0;puzzleHistory=[];grid.replaceChildren();
+      puzzleBoard.forEach((_,index)=>{const tile=document.createElement("button");tile.type="button";tile.dataset.index=String(index);grid.append(tile);});updatePuzzle();
+    }
+    document.getElementById("problem-topic").textContent=problem.label;
+    document.getElementById("math-problem").textContent=problem.prompt;
+    answer.value="";answer.removeAttribute("aria-invalid");feedback.textContent=message;submit.disabled=false;
+  }catch(error){if(error.name!=="AbortError")feedback.textContent=error.message;}
 }
 function showChallenge(message = "") {
   token = grant = null;
@@ -67,9 +70,8 @@ function showChallenge(message = "") {
   keyPanel.hidden = true;
   challengePanel.hidden = false;
   heading.textContent = "Earn your access key";
-  description.textContent = "Choose a light puzzle or a math problem. Your key lasts 24 hours from the moment you earn it.";
-  nextProblem();
-  feedback.textContent = message;
+  description.textContent = "Choose a challenge checked by our key service. Your signed key lasts 24 hours from the moment you earn it.";
+  nextProblem(message);
 }
 function tick() {
   if (!grant) return;
@@ -108,8 +110,9 @@ function updatePuzzle() {
   document.getElementById("puzzle-status").textContent=left ? `${left} lights on · ${puzzleMoves} moves` : "Solved. Claim your key below.";
 }
 grid.addEventListener("click",event=>{
-  const tile=event.target.closest("button[data-index]");if(!tile || issuing || grant)return;
-  puzzleBoard=HaloPuzzle.toggle(puzzleBoard,Number(tile.dataset.index));puzzleMoves++;updatePuzzle();feedback.textContent="";
+  const tile=event.target.closest("button[data-index]");if(!tile || issuing || grant || !problem)return;
+  if(puzzleHistory.length>=256){feedback.textContent="Use Reset board to start this puzzle again.";return;}
+  puzzleBoard=HaloPuzzle.toggle(puzzleBoard,Number(tile.dataset.index));puzzleMoves++;puzzleHistory.push(Number(tile.dataset.index));updatePuzzle();feedback.textContent="";
 });
 grid.addEventListener("keydown",event=>{
   const tile=event.target.closest("button[data-index]");if(!tile)return;
@@ -118,9 +121,9 @@ grid.addEventListener("keydown",event=>{
   if(!offsets[event.key])return;event.preventDefault();const [dy,dx]=offsets[event.key];
   const y=Math.max(0,Math.min(3,row+dy)),x=Math.max(0,Math.min(3,col+dx));grid.children[y*4+x].focus();
 });
-document.getElementById("reset-puzzle").addEventListener("click",()=>{if(issuing || grant)return;puzzleBoard=problem.initial.slice();puzzleMoves=0;updatePuzzle();feedback.textContent="";});
-kind.addEventListener("change",nextProblem);
-level.addEventListener("change", nextProblem);
+document.getElementById("reset-puzzle").addEventListener("click",()=>{if(issuing || grant || !problem)return;puzzleBoard=problem.initial.slice();puzzleMoves=0;puzzleHistory=[];updatePuzzle();feedback.textContent="";});
+kind.addEventListener("change",()=>nextProblem());
+level.addEventListener("change", ()=>nextProblem());
 document.getElementById("new-problem").addEventListener("click", () => { nextProblem(); if(kind.value==="math")answer.focus();else grid.firstElementChild?.focus(); });
 answer.addEventListener("input",()=>{ answer.removeAttribute("aria-invalid"); feedback.textContent=""; });
 document.getElementById("challenge-form").addEventListener("submit", async event => {
@@ -129,23 +132,18 @@ document.getElementById("challenge-form").addEventListener("submit", async event
   if(kind.value==="puzzle" && !HaloPuzzle.solved(puzzleBoard)) {
     feedback.textContent="There are still lights on. Turn them all off, then claim your key.";return;
   }
-  if (kind.value==="math" && !HaloChallenge.correct(problem, answer.value)) {
-    answer.setAttribute("aria-invalid","true");
-    feedback.textContent=HaloChallenge.parseAnswer(answer.value) === null
-      ? "Enter a number or a fraction, such as 7/3."
-      : "That answer doesn’t match. Try the problem again.";
-    answer.focus(); return;
+  if(kind.value==="math" && HaloChallenge.parseAnswer(answer.value)===null) {
+    answer.setAttribute("aria-invalid","true");feedback.textContent="Enter a number or fraction, such as 7/3.";answer.focus();return;
   }
   issuing=true; submit.disabled=true; level.disabled=true; kind.disabled=true; if(kind.value==="puzzle")updatePuzzle();
-  feedback.textContent="Correct. Preparing your key…";
+  feedback.textContent="Checking your solution with the key service…";
   try {
-    const value=await HaloAccess.issue();
-    const info=await HaloAccess.inspect(value);
-    if (!info || info.expired) throw new Error("clock");
-    showKey(value, info, store(value));
-  } catch {
-    feedback.textContent="Couldn’t create a key. Check that this page uses HTTPS and try again.";
-  } finally { issuing=false; submit.disabled=false; level.disabled=false; kind.disabled=false; if(kind.value==="puzzle")updatePuzzle(); }
+    const result=await HaloAccess.redeem(problem.id,answer.value,kind.value==="puzzle"?puzzleHistory:undefined);
+    showKey(result.token,result.grant,store(result.token));
+  } catch(error) {
+    feedback.textContent=error.message;
+    if(error.status===410 || error.status===404){problem=null;feedback.textContent+=" Select New challenge to continue.";}
+  } finally { issuing=false; submit.disabled=!problem; level.disabled=false; kind.disabled=false; if(kind.value==="puzzle")updatePuzzle(); }
 });
 copyButton.addEventListener("click", async () => {
   if (!grant || grant.expiresAt <= Math.floor(Date.now()/1000)) { tick(); return; }
@@ -160,7 +158,7 @@ copyButton.addEventListener("click", async () => {
 });
 async function restore() {
   try {
-    let saved; try { saved=localStorage.getItem(storageName); } catch { /* App persistence still works. */ }
+    let saved; try { localStorage.removeItem("halo.access.v1");saved=localStorage.getItem(storageName); } catch { /* App persistence still works. */ }
     const info=saved ? await HaloAccess.inspect(saved) : null;
     if (info && !info.expired) showKey(saved,info,true);
     else {
