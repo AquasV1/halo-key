@@ -1,6 +1,8 @@
 # Halo key portal
 
-A responsive glass portal for Halo 2.7. Solve a Lights Out puzzle or a randomized math problem, copy the server-signed key, return to Halo, and select Unlock. Keys last exactly 24 hours from successful issuance. Each challenge expires after 15 minutes and allows five failed attempts.
+A compact glass portal for Halo 2.7. Solve a Lights Out puzzle or a randomized math problem, copy the server-signed key, return to Halo, and select Unlock. Keys last exactly 24 hours from successful issuance. Each challenge expires after 15 minutes and allows five failed attempts.
+
+The 2.7.1 portal update focuses on one key card with shorter text and fewer panels. The long key string stays behind **View full key**, while Copy key and the expiry timer remain visible. Help, the app guide, and the script example are kept in a collapsed disclosure below the card. Copy fallback automatically opens the full key before selecting it.
 
 ## Challenges
 
@@ -18,7 +20,7 @@ The portal verifies a key before storing it as `halo.access.v2`, restores the sa
 
 GitHub Pages serves `main` from the root folder. `.nojekyll` allows the static files to be served directly. There is no build step or dependency installation.
 
-- `index.html` / `style.css`: responsive portal, countdown, editor guide, release notes, and FAQ.
+- `index.html` / `style.css`: compact responsive portal, countdown, and collapsible help/app guide.
 - `puzzles.js`: local board display rules.
 - `challenges.js`: numeric parsing and legacy question helpers; authoritative questions and answers come from the server.
 - `access.js`: strict service client and public signature verification.

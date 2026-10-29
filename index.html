@@ -6,117 +6,76 @@
   <meta name="referrer" content="no-referrer">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101113">
-  <meta name="description" content="Solve a light puzzle or math challenge for 24 hours of Halo workspace access. Your key is saved until it expires.">
-  <title>Halo — Your workspace key</title>
+  <meta name="description" content="Your Halo access key. Solve a puzzle or math problem, copy your key, and get back to creating.">
+  <title>Halo — Key portal</title>
   <link rel="icon" href="./halo.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./style.css?v=2.7">
-  <script src="./access.js?v=2.7" defer></script>
-  <script src="./challenges.js?v=2.7" defer></script>
-  <script src="./puzzles.js?v=2.7" defer></script>
-  <script src="./app.js?v=2.7" defer></script>
+  <link rel="stylesheet" href="./style.css?v=2.7.1">
+  <script src="./access.js?v=2.7.1" defer></script>
+  <script src="./challenges.js?v=2.7.1" defer></script>
+  <script src="./puzzles.js?v=2.7.1" defer></script>
+  <script src="./app.js?v=2.7.1" defer></script>
 </head>
 <body>
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
     <symbol id="icon-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
     <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></symbol>
   </svg>
   <div class="ambient" aria-hidden="true"></div>
   <div class="page">
     <header class="navigation">
-      <a class="wordmark" href="./" aria-label="Halo home"><img src="./halo.svg" alt="" width="35" height="28"><span>halo</span></a>
-      <nav aria-label="Main navigation"><a href="#get-key">Get key</a><a href="#guide">Guide</a><a href="#updates">Updates</a><a href="#faq">FAQ</a></nav>
+      <a class="wordmark" href="./" aria-label="Halo home"><img src="./halo.svg" alt="" width="31" height="24"><span>halo</span></a>
+      <span class="portal-label">Key portal</span>
     </header>
-
     <main id="main-content">
-      <section id="get-key" class="portal" aria-labelledby="page-title">
-        <div class="hero">
-          <div class="emblem" aria-hidden="true"><img src="./halo.svg" alt="" width="114" height="82"></div>
-          <p class="eyebrow">HALO WORKSPACE</p>
-          <h1 id="page-title">Your space. <span>Unlocked.</span></h1>
-          <p class="intro">A little challenge. A full day to create.</p>
-        </div>
-
+      <section class="portal" id="get-key" aria-labelledby="access-heading">
         <div class="access-card" aria-busy="true" id="access-card">
-          <div class="card-heading"><h2 id="access-heading">Earn your access key</h2><span class="access-type">24-hour access</span></div>
-          <p class="card-description" id="access-description">Choose a server-checked puzzle or math problem. Your signed key lasts 24 hours from the moment you earn it.</p>
+          <div class="card-heading"><h1 id="access-heading">Get your key</h1><span class="access-type">24 hours</span></div>
+          <p class="card-description" id="access-description">A puzzle or a math problem. One day of access.</p>
           <div id="challenge-panel" hidden>
-            <div class="challenge-options"><label for="challenge-kind">Your challenge</label><select id="challenge-kind"><option value="puzzle">Light puzzle</option><option value="math">Math problem</option></select></div>
-            <div class="challenge-options" id="math-level-options" hidden><label for="challenge-level">Problem level</label><select id="challenge-level"><option value="mixed">Surprise me</option><option value="prealgebra">Pre-algebra</option><option value="algebra">Algebra I</option><option value="algebra2">Algebra II</option><option value="precalculus">Precalculus</option><option value="calculus">Calculus</option></select></div>
-            <div class="problem-box"><span class="eyebrow" id="problem-topic"></span><p id="math-problem"></p></div>
+            <div class="challenge-selectors">
+              <div class="challenge-options"><label for="challenge-kind">Challenge</label><select id="challenge-kind"><option value="puzzle">Light puzzle</option><option value="math">Math problem</option></select></div>
+              <div class="challenge-options" id="math-level-options" hidden><label for="challenge-level">Level</label><select id="challenge-level"><option value="mixed">Surprise me</option><option value="prealgebra">Pre-algebra</option><option value="algebra">Algebra I</option><option value="algebra2">Algebra II</option><option value="precalculus">Precalculus</option><option value="calculus">Calculus</option></select></div>
+            </div>
+            <div class="problem-box" id="problem-box" hidden><span class="problem-topic" id="problem-topic"></span><p id="math-problem"></p></div>
             <section id="puzzle-panel" aria-label="Lights Out puzzle">
-              <p class="puzzle-instructions">Each tile flips itself and its neighbors above, below, left, and right. Turn every light off to earn your key.</p>
+              <p class="puzzle-instructions">Turn every light off. Each tile flips itself and its neighbors above, below, left, and right.</p>
               <div id="puzzle-grid" class="puzzle-grid" role="group" aria-label="Light tiles. Use arrow keys to move and Space to flip a tile."></div>
-              <div class="puzzle-footer"><span id="puzzle-status" role="status" aria-live="polite"></span><button type="button" id="reset-puzzle">Reset board</button></div>
+              <div class="puzzle-footer"><span id="puzzle-status" role="status" aria-live="polite"></span><button type="button" id="reset-puzzle">Reset</button></div>
             </section>
             <form id="challenge-form" novalidate>
               <div id="math-fields" hidden>
-              <label class="answer-label" for="math-answer">Your answer</label><input type="text" id="math-answer" name="answer" autocomplete="off" spellcheck="false" aria-describedby="answer-help challenge-feedback" placeholder="A number or fraction, e.g. 7/3" maxlength="80">
-              <p class="answer-help" id="answer-help">Use an exact fraction or a decimal within 0.000001.</p>
+                <label class="answer-label" for="math-answer">Your answer</label><input type="text" id="math-answer" name="answer" autocomplete="off" spellcheck="false" aria-describedby="answer-help challenge-feedback" placeholder="e.g. 7/3" maxlength="80">
+                <p class="answer-help" id="answer-help">Fractions or decimals, within 0.000001.</p>
               </div>
-              <button class="copy-button" id="check-answer" type="submit">Check challenge &amp; get key <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
+              <button class="primary-button" id="check-answer" type="submit">Get key <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
             </form>
-            <div class="challenge-bottom"><button type="button" id="new-problem">New challenge ↻</button><span>Challenges expire after 15 minutes.</span></div>
+            <div class="challenge-bottom"><button type="button" id="new-problem">New challenge</button><span>15 minutes to solve</span></div>
             <p class="challenge-feedback" id="challenge-feedback" role="status" aria-live="polite"></p>
           </div>
           <div id="key-panel" hidden>
-            <div class="key-field"><code id="access-key" tabindex="0" aria-label="Halo access key"></code></div>
-            <button class="copy-button" id="copy-key" type="button"><svg class="icon" id="copy-icon" aria-hidden="true"><use href="#icon-copy"/></svg><span id="copy-label">Copy key</span></button>
+            <div class="expiry-panel"><div class="expiry-row"><span>Time remaining</span><strong id="key-countdown" role="timer" aria-live="off">24:00:00</strong></div><div class="expiry-track"><progress id="expiry-progress" max="86400" value="86400" aria-label="Remaining access time"></progress></div><p id="key-expiry"></p></div>
+            <button class="primary-button" id="copy-key" type="button"><svg class="icon" id="copy-icon" aria-hidden="true"><use href="#icon-copy"/></svg><span id="copy-label">Copy key</span></button>
             <p class="copy-status" id="copy-status" role="status" aria-live="polite" aria-atomic="true">Saved in this browser. Paste into Halo to unlock.</p>
-            <div class="expiry-panel"><div><span>TIME REMAINING</span><strong id="key-countdown" role="timer" aria-live="off">24:00:00</strong></div><p id="key-expiry"></p><div class="expiry-track" aria-hidden="true"><progress id="expiry-progress" max="86400" value="86400" aria-label="Remaining access time"></progress></div></div>
+            <details class="key-details" id="key-details"><summary>View full key <svg class="icon" aria-hidden="true"><use href="#icon-chevron"/></svg></summary><div class="key-field"><code id="access-key" tabindex="0" aria-label="Halo access key"></code></div></details>
           </div>
-          <p class="copy-status" id="access-loading" role="status">Checking saved access…</p>
+          <p class="loading-status" id="access-loading" role="status">Checking saved access…</p>
         </div>
-        <ol class="steps" id="how-to" aria-label="How to unlock Halo"><li><span class="step-number">01</span><span>Solve a challenge</span></li><li><span class="step-number">02</span><span>Copy your key</span></li><li><span class="step-number">03</span><span>Paste &amp; unlock</span></li></ol>
+        <details class="help-panel" id="portal-help">
+          <summary>Help &amp; app guide <svg class="icon" aria-hidden="true"><use href="#icon-chevron"/></svg></summary>
+          <div class="help-content">
+            <details><summary>How do I unlock Halo?</summary><p>Solve a challenge, select Copy key, then paste it into Halo and select Unlock. Your browser and the app remember your key until its original expiry. Refreshing never extends it.</p><p>After expiry, solve a new challenge. Use File → Forget saved key in Halo to clear saved access.</p></details>
+            <details><summary>Puzzles, math, and attempts</summary><p>For Lights Out, turn every tile off. Reset restores the same board; New challenge starts another. Use arrow keys to move and Space to flip a tile.</p><p>Math ranges from pre-algebra through calculus. Exact fractions and decimals are accepted. Each challenge lasts 15 minutes and allows five failed attempts. Your key lasts 24 hours from a successful solution.</p></details>
+            <details><summary>Writing and running scripts</summary><p>New or + creates a tab. Open can load several files. Save, Clear, and Execute use the selected tab; Execute becomes Stop while a script runs. Output shows results and clickable errors.</p><p>Use ⌘F to find text. Library keeps saved scripts and favorites; Settings controls the editor. Type part of a name, then press Tab to accept a suggestion or Escape to dismiss it.</p><p>Halo runs Luau locally. Roblox APIs such as game and workspace are unavailable.</p><pre tabindex="0"><code id="example-code">local message = "Hello, Halo"
+print(message)</code></pre><button class="text-button" type="button" id="copy-example">Copy example <svg class="icon" aria-hidden="true"><use href="#icon-copy"/></svg></button><p class="example-status" id="example-status" role="status" aria-live="polite"></p></details>
+            <details><summary>Copying or access trouble?</summary><p>If automatic copying is blocked, open View full key, select the complete key, and press ⌘C or Ctrl+C. Paste it into Halo 2.7 or later.</p><p>Keep your device clock correct. Keys are signed by the Halo key service; old demo keys are retired. If a challenge expires or locks, select New challenge.</p></details>
+          </div>
+        </details>
         <noscript><p class="no-script">JavaScript is needed to connect to the key service.</p></noscript>
       </section>
-      <section class="content-section" id="guide" aria-labelledby="guide-title">
-        <div class="section-heading"><p class="eyebrow">GET SETTLED IN</p><h2 id="guide-title">From key to first line.</h2><p>A few small steps, then the space is yours.</p></div>
-        <div class="guide-grid">
-          <article class="glass-panel"><span class="number">01 / ACCESS</span><h3>Solve. Copy. You’re in.</h3><p>Choose a Lights Out puzzle or a math level from pre-algebra to calculus and solve one challenge. Copy your 24-hour key, paste it into Halo, and select Unlock.</p><a class="text-link" href="#get-key">Back to your key ↗</a></article>
-          <article class="glass-panel"><span class="number">02 / WRITE</span><h3>Keep your train of thought.</h3><p>Start a new file or open a .luau script. Syntax colors and aligned line numbers help you follow your code.</p><p class="small-note">New, Open, Save, and Clear live along the bottom.</p></article>
-          <article class="glass-panel"><span class="number">03 / RUN</span><h3>See your idea work.</h3><p>Select Execute to run Luau locally and view results in Output. The button becomes Stop while the script runs.</p><p class="small-note">⌘ Return runs or stops your script on Mac.</p></article>
-        </div>
-      </section>
-
-      <section class="content-section workspace-section" aria-labelledby="workspace-title">
-        <div class="section-heading"><p class="eyebrow">ROOM TO THINK</p><h2 id="workspace-title">Your code stays in focus.</h2><p>Soft glass. Clear colors. Suggestions that stay out of the way.</p></div>
-        <div class="workspace-grid">
-          <div class="editor-preview glass-panel" role="img" aria-label="Editor preview: a faint print suggestion appears after pr, with a Tab hint, without covering existing code.">
-            <div class="preview-title"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>hello.luau</span><span class="preview-tag">LUAU</span></div>
-            <div class="preview-code" aria-hidden="true"><div><b>1</b><span class="syntax-comment">-- A little room for your next idea</span></div><div><b>2</b><span class="syntax-keyword">local</span> message = <span class="syntax-string">"Hello, Halo"</span></div><div><b>3</b>pr<span class="ghost">int</span><kbd>Tab</kbd></div><div><b>4</b></div><div><b>5</b></div></div>
-            <div class="preview-toolbar"><span>New</span><span>Open</span><span>Save</span><span>Clear</span><span class="preview-execute">▷ Execute</span></div>
-          </div>
-          <div class="feature-list"><article><h3>A suggestion, when you need it.</h3><p>A faint word ending appears in empty space after your cursor. Tab accepts it. Escape dismisses it. Enter keeps making a new line.</p></article><article><h3>Your day, remembered.</h3><p>Your browser and Halo remember your key until it expires. Reopening either keeps the same deadline. Check your access in File → Key access.</p></article><article><h3>Everything close at hand.</h3><p>Open and save your scripts, see local output, and stop a running script without leaving the editor.</p></article></div>
-        </div>
-      </section>
-
-      <section class="content-section example-section glass-panel" aria-labelledby="example-title">
-        <div><p class="eyebrow">YOUR FIRST SCRIPT</p><h2 id="example-title">Start with a hello.</h2><p>Paste this into Halo and select Execute.<br>Your message will appear in Output.</p><button class="secondary-button" type="button" id="copy-example">Copy example <svg class="icon" aria-hidden="true"><use href="#icon-copy"/></svg></button><p class="example-status" id="example-status" role="status" aria-live="polite"></p></div>
-        <pre tabindex="0"><code id="example-code">local message = "Hello, Halo"
-print(message)</code></pre>
-      </section>
-
-      <section class="content-section" id="updates" aria-labelledby="updates-title">
-        <div class="section-heading"><p class="eyebrow">A LITTLE MORE REFINED</p><h2 id="updates-title">What’s new in Halo.</h2></div>
-        <article class="release glass-panel"><div class="release-label"><span class="access-type">Version 2.7</span><span>Signed access</span></div><div><h3>A challenge. Then 24 hours.</h3><ul><li>Solvable light puzzles plus randomized math from pre-algebra through calculus.</li><li>Answers are checked on the server; keys are signed and valid for 24 hours.</li><li>Saved access survives a relaunch without extending the deadline.</li></ul></div></article>
-      </section>
-
-      <section class="content-section faq-section" id="faq" aria-labelledby="faq-title">
-        <div class="section-heading"><p class="eyebrow">GOOD TO KNOW</p><h2 id="faq-title">A few quick answers.</h2></div>
-        <div class="faq-list">
-          <details><summary>Will I need to enter the key every time?</summary><p>Halo remembers a valid key until its original 24-hour expiry. Closing the app, refreshing this page, or entering the key again does not reset that deadline. After expiry, solve a new challenge. File → Forget saved key clears the saved key on your device.</p></details>
-          <details><summary>How do code suggestions work?</summary><p>Pause after typing part of a word, or a known library such as math. A faint ending appears only when there is enough empty space at the end of the line. Press Tab to accept or Escape to dismiss. Enter makes a new line. Use Option + Escape on Mac or Ctrl + Space on Windows/Linux to request or cycle suggestions.</p></details>
-          <details><summary>What scripts can Halo run?</summary><p>Halo runs standard Luau locally in its own runtime. Try print, tables, functions, and math. Roblox game APIs such as game, workspace, and Instance are not available in this local workspace.</p></details>
-          <details><summary>How does the 24-hour expiry work?</summary><p>The countdown begins when your correct answer generates a key, not when you first paste it into Halo. The website and desktop app check the same deadline. The service validates your answer and signs the original issue and expiry times. Halo verifies that signature using a public key. Browser code cannot issue new signed keys.</p></details>
-          <details><summary>How do the light puzzles work?</summary><p>Flip a tile to toggle it and its horizontal and vertical neighbors. Your goal is an entirely dark board. Every generated board is solvable, and each challenge stays open for 15 minutes. Use Reset board to start the same puzzle again, or New challenge for a different board. Keyboard users can move with arrow keys and press Space to flip a tile.</p></details>
-          <details><summary>What kinds of math problems will I get?</summary><p>Choose a level or let Halo surprise you: multi-step arithmetic, linear equations and systems, quadratics and exponentials, function composition and series, or derivatives and definite integrals. Answers can be exact fractions or decimals. An incorrect answer never reveals a key.</p></details>
-          <details><summary>The copy button isn’t working. What can I do?</summary><p>After solving, select the full generated key above, then press ⌘C on Mac or Ctrl+C on Windows/Linux. Return to Halo, paste it into the key field, and select Unlock.</p></details>
-        </div>
-      </section>
     </main>
-
-    <footer><span>Halo · Made for your flow.</span><div><a href="https://github.com/AquasV1/halo-key">Website source ↗</a><a href="#get-key">Back to top ↑</a></div></footer>
+    <footer><span>Halo · 24-hour access</span><a href="https://github.com/AquasV1/halo-key">Source <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a></footer>
   </div>
 </body>
 </html>

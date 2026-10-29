@@ -7,6 +7,8 @@ async function copyText(element) {
       return true;
     }
   } catch { /* Keep a selection fallback for browsers that deny clipboard access. */ }
+  const details=element.closest?.("details");
+  if(details)details.open=true;
   const range = document.createRange();
   range.selectNodeContents(element);
   const selection = window.getSelection();
@@ -48,13 +50,17 @@ async function nextProblem(message="") {
   if(issuing)return;
   challengeRequest?.abort();const controller=new AbortController();challengeRequest=controller;
   problem=null;submit.disabled=true;feedback.textContent="Loading a server challenge…";
+  const isPuzzle=kind.value==="puzzle";
+  document.getElementById("math-level-options").hidden=isPuzzle;
+  document.getElementById("math-fields").hidden=isPuzzle;
+  document.getElementById("problem-box").hidden=isPuzzle;
+  document.getElementById("puzzle-panel").hidden=!isPuzzle;
+  document.getElementById("problem-topic").textContent="";
+  document.getElementById("math-problem").textContent="Loading problem…";
+  for(const tile of grid.children)tile.disabled=true;
   try {
-    const isPuzzle=kind.value==="puzzle";
     const fresh=await HaloAccess.challenge(kind.value,level.value,controller.signal);
     if(controller.signal.aborted)return;problem=fresh;
-    document.getElementById("math-level-options").hidden=isPuzzle;
-    document.getElementById("math-fields").hidden=isPuzzle;
-    document.getElementById("puzzle-panel").hidden=!isPuzzle;
     if(isPuzzle) {
       puzzleBoard=problem.initial.slice();puzzleMoves=0;puzzleHistory=[];grid.replaceChildren();
       puzzleBoard.forEach((_,index)=>{const tile=document.createElement("button");tile.type="button";tile.dataset.index=String(index);grid.append(tile);});updatePuzzle();
@@ -62,15 +68,16 @@ async function nextProblem(message="") {
     document.getElementById("problem-topic").textContent=problem.label;
     document.getElementById("math-problem").textContent=problem.prompt;
     answer.value="";answer.removeAttribute("aria-invalid");feedback.textContent=message;submit.disabled=false;
-  }catch(error){if(error.name!=="AbortError")feedback.textContent=error.message;}
+  }catch(error){if(!controller.signal.aborted && error.name!=="AbortError")feedback.textContent=error.message;}
 }
 function showChallenge(message = "") {
   token = grant = null;
   key.textContent = "";
+  document.getElementById("key-details").open=false;
   keyPanel.hidden = true;
   challengePanel.hidden = false;
-  heading.textContent = "Earn your access key";
-  description.textContent = "Choose a challenge checked by our key service. Your signed key lasts 24 hours from the moment you earn it.";
+  heading.textContent = "Get your key";
+  description.textContent = "Choose a challenge. Your key lasts 24 hours.";
   nextProblem(message);
 }
 function tick() {
@@ -89,11 +96,12 @@ function tick() {
 function showKey(value, info, remembered) {
   token=value; grant=info;
   key.textContent=token;
+  document.getElementById("key-details").open=false;
   challengePanel.hidden=true; keyPanel.hidden=false;
   heading.textContent="Your key is ready";
-  description.textContent="Copy the full key, return to Halo, and select Unlock. Your original expiry stays the same across launches.";
+  description.textContent="Copy your key, then paste it into Halo to unlock.";
   copyLabel.textContent="Copy key"; copyIcon.setAttribute("href","#icon-copy");
-  copyStatus.textContent=remembered ? "Saved in this browser. Paste into Halo to unlock." : "Key ready. Your browser couldn’t save it, so keep a copy.";
+  copyStatus.textContent=remembered ? "Saved in this browser until expiry." : "Your browser couldn’t save this key. Keep a copy.";
   copyStatus.removeAttribute("data-state");
   const date=new Date(info.expiresAt*1000);
   document.getElementById("key-expiry").textContent=`Expires ${date.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZoneName:"short"})}.`;
