@@ -10,12 +10,13 @@
   <title>Halo — Key portal</title>
   <link rel="icon" href="./halo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./style.css?v=2.7.1">
+  <link rel="stylesheet" href="./glass.css?v=20261120">
   <script src="./access.js?v=2.7.1" defer></script>
   <script src="./challenges.js?v=2.7.1" defer></script>
   <script src="./puzzles.js?v=2.7.1" defer></script>
   <script src="./app.js?v=2.7.1" defer></script>
 </head>
-<body>
+<body class="halo-portal">
   <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <symbol id="icon-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
     <symbol id="icon-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
@@ -26,7 +27,7 @@
   <div class="page">
     <header class="navigation">
       <a class="wordmark" href="./" aria-label="Halo home"><img src="./halo.svg" alt="" width="31" height="24"><span>halo</span></a>
-      <span class="portal-label">Key portal</span>
+      <div class="portal-links"><span class="portal-label">Key portal</span><a href="https://halo.gsrisun19.chatgpt.site">Get Halo</a></div>
     </header>
     <main id="main-content">
       <section class="portal" id="get-key" aria-labelledby="access-heading">
@@ -49,7 +50,7 @@
                 <label class="answer-label" for="math-answer">Your answer</label><input type="text" id="math-answer" name="answer" autocomplete="off" spellcheck="false" aria-describedby="answer-help challenge-feedback" placeholder="e.g. 7/3" maxlength="80">
                 <p class="answer-help" id="answer-help">Fractions or decimals, within 0.000001.</p>
               </div>
-              <button class="primary-button" id="check-answer" type="submit">Get key <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></button>
+              <button class="primary-button" id="check-answer" type="submit">Get key</button>
             </form>
             <div class="challenge-bottom"><button type="button" id="new-problem">New challenge</button><span>15 minutes to solve</span></div>
             <p class="challenge-feedback" id="challenge-feedback" role="status" aria-live="polite"></p>
@@ -67,7 +68,7 @@
           <div class="help-content">
             <details><summary>How do I unlock Halo?</summary><p>Solve a challenge, select Copy key, then paste it into Halo and select Unlock. Your browser and the app remember your key until its original expiry. Refreshing never extends it.</p><p>After expiry, solve a new challenge. Use File → Forget saved key in Halo to clear saved access.</p></details>
             <details><summary>Puzzles, math, and attempts</summary><p>For Lights Out, turn every tile off. Reset restores the same board; New challenge starts another. Use arrow keys to move and Space to flip a tile.</p><p>Math ranges from pre-algebra through calculus. Exact fractions and decimals are accepted. Each challenge lasts 15 minutes and allows five failed attempts. Your key lasts 24 hours from a successful solution.</p></details>
-            <details><summary>Writing and running scripts</summary><p>New or + creates a tab. Open can load several files. Save, Clear, and Execute use the selected tab; Execute becomes Stop while a script runs. Output shows results and clickable errors.</p><p>Use ⌘F to find text. Library keeps saved scripts and favorites; Settings controls the editor. Type part of a name, then press Tab to accept a suggestion or Escape to dismiss it.</p><p>Halo runs Luau locally. Roblox APIs such as game and workspace are unavailable.</p><pre tabindex="0"><code id="example-code">local message = "Hello, Halo"
+            <details><summary>Writing and running scripts</summary><p>New or + creates a tab. Open can load several files. Save, Clear, and Execute use the selected tab; Execute becomes Stop while a script runs. Output shows results and clickable errors.</p><p>Use ⌘F to find text. Quick Scripts lets you choose files and load checked scripts into tabs; Settings controls the editor. Type part of a name, then press Tab to accept a suggestion or Escape to dismiss it.</p><p>Halo runs Luau locally. Roblox APIs such as game and workspace are unavailable.</p><pre tabindex="0"><code id="example-code">local message = "Hello, Halo"
 print(message)</code></pre><button class="text-button" type="button" id="copy-example">Copy example <svg class="icon" aria-hidden="true"><use href="#icon-copy"/></svg></button><p class="example-status" id="example-status" role="status" aria-live="polite"></p></details>
             <details><summary>Copying or access trouble?</summary><p>If automatic copying is blocked, open View full key, select the complete key, and press ⌘C or Ctrl+C. Paste it into Halo 2.7 or later.</p><p>Keep your device clock correct. Keys are signed by the Halo key service; old demo keys are retired. If a challenge expires or locks, select New challenge.</p></details>
           </div>
@@ -75,7 +76,7 @@ print(message)</code></pre><button class="text-button" type="button" id="copy-ex
         <noscript><p class="no-script">JavaScript is needed to connect to the key service.</p></noscript>
       </section>
     </main>
-    <footer><span>Halo · 24-hour access</span><a href="https://github.com/AquasV1/halo-key">Source <svg class="icon" aria-hidden="true"><use href="#icon-arrow"/></svg></a></footer>
+    <footer><span>Halo · 24-hour access</span><a href="https://github.com/AquasV1/halo-key">Source</a></footer>
   </div>
 </body>
 </html>

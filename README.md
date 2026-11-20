@@ -34,3 +34,5 @@ Release this client only after the new service is public and the matching Halo 2
 The Content Security Policy restricts scripts, styles, and images to this origin, and API connections to the exact Halo service origin. Inline scripts, eval, plugins, injected base URLs, and form navigation are blocked. Referrers are suppressed. Dynamic text uses textContent; tiles are created with DOM methods. No third-party scripts, fonts, analytics, or AI services are loaded. API requests omit cookies and refuse redirects.
 
 The server binds challenges to a random browser session, enforces attempt limits and rate limits, caps JSON bodies, and validates solutions against stored state. CORS restricts browser access to this GitHub origin, but is not authentication. Puzzles and math are access challenges, not CAPTCHA or a strong anti-bot defense. Signed keys are transferable until expiry; this release does not implement accounts, device binding, or immediate revocation.
+
+The portal uses `glass.css` for translucent surfaces, animated ambient lighting, panel transitions, and reduced-motion/transparency fallbacks. Styling is separate from challenge, signature, and expiry logic.
